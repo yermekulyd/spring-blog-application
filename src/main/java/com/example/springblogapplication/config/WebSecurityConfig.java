@@ -26,6 +26,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/posts/**").permitAll()
                         .requestMatchers("/profile/**").permitAll()
+                        .requestMatchers("/comments/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

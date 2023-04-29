@@ -8,6 +8,7 @@ import lombok.Setter;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +33,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
     private Account account;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     @Override
     public String toString() {
