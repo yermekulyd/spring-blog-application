@@ -62,6 +62,7 @@ public class AccountService {
         return null;
     }
 
+    //testing
 
     public Optional<Account> findOneByEmail(String email) {
         return accountRepository.findOneByEmailIgnoreCase(email);
