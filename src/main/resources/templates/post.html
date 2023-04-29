@@ -70,6 +70,24 @@
             <li><a th:href="@{'/posts/' + ${post.id} + '/delete'}">Delete</a></li>
         </ul>
         <hr />
+
+        <h4>Add Comment</h4>
+        <form th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
+            <div class="form-group">
+                <label for="new-comment">Comment</label>
+                <textarea id="new-comment" th:field="*{comment.body}" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <hr />
+
+        <h4>Comments</h4>
+        <div th:each="comment : ${post.comments}">
+            <p th:text="${comment.body}">comment body</p>
+            <p th:text="'By ' + ${comment.account.email} + ' on ' + ${comment.createdAt}">comment details</p>
+            <hr />
+        </div>
+    </div>
     </div>
     <footer class="footer mt-auto py-3">
         <div class="container">

@@ -21,115 +21,130 @@ public class CommentController {
 
     private final CommentService commentService;
     private final AccountService accountService;
-//    private final PostService postService;
+    private final PostService postService;
 
     @Autowired
-    public CommentController(CommentService commentService, AccountService accountService) {
+    public CommentController(CommentService commentService, AccountService accountService, PostService postService) {
         this.commentService = commentService;
         this.accountService = accountService;
+        this.postService = postService;
     }
 
-    @GetMapping("/comments/{id}")
-    public String getComment(@PathVariable Long id, Model model) {
-
-        // find comment by id
-        Optional<Comment> optionalComment = this.commentService.getById(id);
-
-        // if comment exists put it in model
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            model.addAttribute("comment", comment);
-            return "comment";
-        } else {
-            return "404";
-        }
-    }
-
-
-
-    @GetMapping("/comments/new")
+    @PostMapping("/posts/{id}/comments")
     @PreAuthorize("isAuthenticated()")
-    public String createNewPost(Model model, Principal principal) {
+    public String createNewComment(@PathVariable Long id, @ModelAttribute Comment comment, Principal principal) {
+        Optional<Post> optionalPost = postService.getById(id);
 
-        String authUsername = "anonymousUser";
-        if (principal != null) {
-            authUsername = principal.getName();
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            String authUsername = "anonymousUser";
+
+            if (principal != null) {
+                authUsername = principal.getName();
+            }
+
+            Optional<Account> optionalAccount = accountService.findOneByEmail(authUsername);
+
+            if (optionalAccount.isPresent()) {
+                Account account = optionalAccount.get();
+
+                comment.setPost(post);
+                comment.setAccount(account);
+
+                commentService.save(comment);
+                System.out.println("Creating 1 comment");
+            }
         }
 
-        Optional<Account> optionalAccount = accountService.findOneByEmail(authUsername);
-        if (optionalAccount.isPresent()) {
-            Comment comment = new Comment();
-            comment.setAccount(optionalAccount.get());
-            model.addAttribute("comment", comment);
-            return "comment_new";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-
-    @PostMapping("/comments/new")
-    @PreAuthorize("isAuthenticated()")
-    public String createNewComment(@ModelAttribute Comment comment, Principal principal) {
-        String authUsername = "anonymousUser";
-        if (principal != null) {
-            authUsername = principal.getName();
-        }
-        if (comment.getAccount().getEmail().compareToIgnoreCase(authUsername) < 0) {
-            // TODO: some kind of error?
-            // our account email on the Comment not equal to current logged in account!
-        }
-        commentService.save(comment);
-//        return "redirect:/posts/" + comment.getPost().getId();
-        return "redirect:/";
-    }
-
-    @GetMapping("/comments/{id}/edit")
-    @PreAuthorize("isAuthenticated()")
-    public String getCommentForEdit(@PathVariable Long id, Model model) {
-
-        // find comment by id
-        Optional<Comment> optionalComment = commentService.getById(id);
-        // if comment exist put it in model
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            model.addAttribute("comment", comment);
-            return "comment_edit";
-        } else {
-            return "404";
-        }
-    }
-
-    @PostMapping("/comments/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String updateComment(@PathVariable Long id, Comment comment, BindingResult result, Model model) {
-
-        Optional<Comment> optionalComment = commentService.getById(id);
-        if (optionalComment.isPresent()) {
-            Comment existingComment = optionalComment.get();
-
-            existingComment.setBody(comment.getBody());
-
-            commentService.save(existingComment);
-        }
-
-        return "redirect:/comments/" + comment.getId();
-    }
-
-    @GetMapping("/comments/{id}/delete")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deleteComment(@PathVariable Long id) {
-
-        // find comment by id
-        Optional<Comment> optionalComment = commentService.getById(id);
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-
-            commentService.delete(comment);
-            return "redirect:/";
-        } else {
-            return "404";
-        }
+        return "redirect:/posts/" + id;
     }
 
 }
+//    @GetMapping("/comments/{id}")
+//    public String getComment(@PathVariable Long id, Model model) {
+//
+//        // find comment by id
+//        Optional<Comment> optionalComment = this.commentService.getById(id);
+//
+//        // if comment exists put it in model
+//        if (optionalComment.isPresent()) {
+//            Comment comment = optionalComment.get();
+//            model.addAttribute("comment", comment);
+//            return "comment";
+//        } else {
+//            return "404";
+//        }
+//    }
+//
+//
+//
+//    @GetMapping("/comments/new")
+//    @PreAuthorize("isAuthenticated()")
+//    public String createNewPost(Model model, Principal principal) {
+//
+//        String authUsername = "anonymousUser";
+//        if (principal != null) {
+//            authUsername = principal.getName();
+//        }
+//
+//        Optional<Account> optionalAccount = accountService.findOneByEmail(authUsername);
+//        if (optionalAccount.isPresent()) {
+//            Comment comment = new Comment();
+//            comment.setAccount(optionalAccount.get());
+//            model.addAttribute("comment", comment);
+//            return "comment_new";
+//        } else {
+//            return "redirect:/";
+//        }
+//    }
+
+
+//    @GetMapping("/comments/{id}/edit")
+//    @PreAuthorize("isAuthenticated()")
+//    public String getCommentForEdit(@PathVariable Long id, Model model) {
+//
+//        // find comment by id
+//        Optional<Comment> optionalComment = commentService.getById(id);
+//        // if comment exist put it in model
+//        if (optionalComment.isPresent()) {
+//            Comment comment = optionalComment.get();
+//            model.addAttribute("comment", comment);
+//            return "comment_edit";
+//        } else {
+//            return "404";
+//        }
+//    }
+
+//    @PostMapping("/comments/{id}")
+//    @PreAuthorize("isAuthenticated()")
+//    public String updateComment(@PathVariable Long id, Comment comment, BindingResult result, Model model) {
+//
+//        Optional<Comment> optionalComment = commentService.getById(id);
+//        if (optionalComment.isPresent()) {
+//            Comment existingComment = optionalComment.get();
+//
+//            existingComment.setBody(comment.getBody());
+//
+//            commentService.save(existingComment);
+//        }
+//
+//        return "redirect:/comments/" + comment.getId();
+//    }
+
+//    @GetMapping("/comments/{id}/delete")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public String deleteComment(@PathVariable Long id) {
+//
+//        // find comment by id
+//        Optional<Comment> optionalComment = commentService.getById(id);
+//        if (optionalComment.isPresent()) {
+//            Comment comment = optionalComment.get();
+//
+//            commentService.delete(comment);
+//            return "redirect:/";
+//        } else {
+//            return "404";
+//        }
+//    }
+
+

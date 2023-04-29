@@ -1,9 +1,11 @@
 package com.example.springblogapplication.controllers;
 
 import com.example.springblogapplication.models.Account;
+import com.example.springblogapplication.models.Comment;
 import com.example.springblogapplication.models.Post;
 import com.example.springblogapplication.repositories.PostFactory;
 import com.example.springblogapplication.services.AccountService;
+import com.example.springblogapplication.services.CommentService;
 import com.example.springblogapplication.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,6 +54,8 @@ public class PostController {
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
             model.addAttribute("post", post);
+            model.addAttribute("comment", new Comment());
+            System.out.println("checky-checky");
             return "post";
         } else {
             return "404";
@@ -97,7 +101,7 @@ public class PostController {
 
     @PostMapping("/posts/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNewPost(@ModelAttribute Post post, Principal principal) {
+    public String createNewPost(@ModelAttribute Post post, Principal principal, Model model) {
         String authUsername = "anonymousUser";
         if (principal != null) {
             authUsername = principal.getName();

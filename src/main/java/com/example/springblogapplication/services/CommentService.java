@@ -15,10 +15,6 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Optional<Comment> getById(Long id) {
-        return commentRepository.findById(id);
-    }
-
     public Comment save(Comment comment) {
         if (comment.getId() == null) {
             comment.setCreatedAt(LocalDateTime.now());
@@ -26,7 +22,4 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public void delete(Comment comment) {
-        commentRepository.delete(comment);
-    }
 }
