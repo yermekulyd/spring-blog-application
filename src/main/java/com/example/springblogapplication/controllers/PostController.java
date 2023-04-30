@@ -12,10 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -48,7 +45,10 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public String getPost(@PathVariable Long id, Model model) {
+    public String getPost(@PathVariable Long id, Model model,
+                          @RequestParam(name = "sort", defaultValue = "createdAt") String sortField,
+                          @RequestParam(name = "order", defaultValue = "desc") String sortOrder) {
+
         // find post by id
         Optional<Post> optionalPost = this.postService.getById(id);
 
@@ -58,8 +58,8 @@ public class PostController {
             model.addAttribute("post", post);
             model.addAttribute("comment", new Comment());
 
-            // get comments for post
-            List<Comment> comments = this.commentService.getByPost(post);
+            // get comments for post and sort them
+            List<Comment> comments = this.commentService.getByPost(post, sortField, sortOrder);
             model.addAttribute("comments", comments);
 
             System.out.println("getPost called for post with id " + id);
@@ -68,6 +68,7 @@ public class PostController {
             return "404";
         }
     }
+
 
 
     @PostMapping("/posts/{id}")

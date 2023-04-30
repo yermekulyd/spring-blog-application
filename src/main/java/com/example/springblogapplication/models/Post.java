@@ -37,6 +37,7 @@ public class Post {
     private Account account;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderBy("createdAt DESC")
     private Set<Comment> comments = new HashSet<>();
 
     @Override
