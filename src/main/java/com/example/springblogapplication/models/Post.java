@@ -27,6 +27,8 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String body;
 
+    private String imageUrl;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -45,6 +47,7 @@ public class Post {
         return "Post{" +
                 "id=" + id +
                 ", title='" + title + "'" +
+                ", imageUrl='" + imageUrl + "'" +
                 ", body='" + body + "'" +
                 ", createdAt='" + createdAt + "'" +
                 ", updatedAt='" + updatedAt + "'" +

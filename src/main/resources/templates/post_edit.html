@@ -74,6 +74,10 @@
                 <label for="new-post-body">Body</label>
                 <textarea id="new-post-body" th:field="*{body}"></textarea>
             </div>
+            <div>
+                <label for="new-post-image">ImageUrl:</label>
+                <textarea id="new-post-image" th:field="*{imageUrl}" placeholder="Enter the post image url"></textarea>
+            </div>
             <button type="submit">Update Post</button>
         </form>
     </div>

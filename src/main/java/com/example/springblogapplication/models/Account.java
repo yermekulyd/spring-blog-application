@@ -30,6 +30,7 @@ public class Account implements Serializable {
     private String lastName;
 
     @OneToMany(mappedBy = "account")
+    @OrderBy("createdAt DESC")
     private List<Post> posts;
 
     @ManyToMany(fetch = FetchType.EAGER)

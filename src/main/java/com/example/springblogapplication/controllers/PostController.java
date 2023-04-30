@@ -81,6 +81,7 @@ public class PostController {
 
             existingPost.setTitle(post.getTitle());
             existingPost.setBody(post.getBody());
+            existingPost.setImageUrl(post.getImageUrl());
 
             postService.save(existingPost);
         }

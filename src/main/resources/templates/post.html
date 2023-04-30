@@ -12,13 +12,16 @@
         html, body {
             height: 100%;
         }
-
         .container {
             min-height: 100%;
             display: flex;
             flex-direction: column;
         }
-
+        .post img {
+            max-width: 100%;
+            min-width: 100%;
+            height: auto;
+        }
         .content {
             flex: 1;
         }
@@ -61,9 +64,10 @@
     <div class="content">
         <div class="post">
             <h2 th:text="${post.title}">Title</h2>
-            <h5 th:text="'Created at ' + ${post.createdAt}">Created At</h5>
-            <h5 th:text="'Updated at ' + ${post.updatedAt}">Updated At</h5>
-            <p th:text="${post.body}">body text</p>
+            <img th:if="${post.imageUrl != null and post.imageUrl != ''}" th:src="${post.imageUrl}" alt="Post image"/>
+            <p th:text="'Created at ' + ${post.createdAt}">Created At</p>
+            <p th:text="'Updated at ' + ${post.updatedAt}">Updated At</p>
+            <h4 th:text="${post.body}">body text</h4>
         </div>
         <ul sec:authorize="isAuthenticated()">
             <li><a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a></li>
