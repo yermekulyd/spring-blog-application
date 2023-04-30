@@ -28,12 +28,15 @@ public class PostController {
 
     private final PostService postService;
     private final PostFactory postFactory;
+    private final CommentService commentService;
 
     @Autowired
-    public PostController(PostService postService, PostFactory postFactory) {
+    public PostController(PostService postService, PostFactory postFactory, CommentService commentService) {
         this.postService = postService;
         this.postFactory = postFactory;
+        this.commentService = commentService;
     }
+
 
     //Factory
     @GetMapping("/posts/new")
@@ -46,7 +49,6 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String getPost(@PathVariable Long id, Model model) {
-
         // find post by id
         Optional<Post> optionalPost = this.postService.getById(id);
 
@@ -55,12 +57,18 @@ public class PostController {
             Post post = optionalPost.get();
             model.addAttribute("post", post);
             model.addAttribute("comment", new Comment());
-            System.out.println("checky-checky");
+
+            // get comments for post
+            List<Comment> comments = this.commentService.getByPost(post);
+            model.addAttribute("comments", comments);
+
+            System.out.println("getPost called for post with id " + id);
             return "post";
         } else {
             return "404";
         }
     }
+
 
     @PostMapping("/posts/{id}")
     @PreAuthorize("isAuthenticated()")
