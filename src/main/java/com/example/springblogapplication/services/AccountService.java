@@ -7,7 +7,11 @@ import com.example.springblogapplication.repositories.AuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -24,9 +28,6 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
     //Singleton
     private AccountService() {}
     public static synchronized AccountService getInstance() {
@@ -36,20 +37,6 @@ public class AccountService {
         return instance;
     }
 
-    public Account save(Account account) {
-
-        if (account.getId() == null) {
-            if (account.getAuthorities().isEmpty()) {
-                Set<Authority> authorities = new HashSet<>();
-                authorityRepository.findById("ROLE_USER").ifPresent(authorities::add);
-                account.setAuthorities(authorities);
-            }
-        }
-
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return accountRepository.save(account);
-    }
-
     public Account update(Account account) {
         Optional<Account> optionalAccount = accountRepository.findOneByEmailIgnoreCase(account.getEmail());
         if (optionalAccount.isPresent()) {
@@ -57,6 +44,7 @@ public class AccountService {
             currentAccount.setFirstName(account.getFirstName());
             currentAccount.setLastName(account.getLastName());
             currentAccount.setPassword(passwordEncoder.encode(account.getPassword()));
+            currentAccount.setPhotos(account.getPhotos());
             return accountRepository.save(currentAccount);
         }
         return null;

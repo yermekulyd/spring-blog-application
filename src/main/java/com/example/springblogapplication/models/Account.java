@@ -29,6 +29,15 @@ public class Account implements Serializable {
 
     private String lastName;
 
+    private String photos;
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (photos == null || id == null) return null;
+
+        return "/user-photos/" + id + "/" + photos;
+    }
+
     @OneToMany(mappedBy = "account")
     @OrderBy("createdAt DESC")
     private List<Post> posts;
@@ -48,6 +57,7 @@ public class Account implements Serializable {
                 ", lastName='" + lastName + "'" +
                 ", email='" + email + "'" +
                 ", authorities=" + authorities +
+                ", photos=" + photos +
                 "}";
     }
 }

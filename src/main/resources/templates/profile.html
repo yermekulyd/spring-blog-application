@@ -64,6 +64,7 @@
             <h5>E-mail: <p th:text="${account.email}">Email</p></h5>
             <h5>First Name: <p th:text="${account.firstName}">First Name</p></h5>
             <h5>Last Name: <p th:text="${account.lastName}">Last Name</p></h5>
+            <img th:src="@{/user-photos/__${account.id}__/__${account.photos}__}" />
             <p><a th:href="@{/profile/edit}">Edit profile</a></p>
         </div>
     </div>

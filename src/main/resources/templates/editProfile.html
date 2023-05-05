@@ -58,11 +58,13 @@
 <div class="container">
   <div class="content">
     <h1>Edit Profile</h1>
-    <form th:action="@{/profile/edit}" th:object="${account}" method="post">
+    <form th:action="@{/profile/edit}" th:object="${account}" method="post" enctype="multipart/form-data">
       <label for="firstName">First Name:</label>
       <input type="text" id="firstName" th:field="*{firstName}" required><br><br>
       <label for="lastName">Last Name:</label>
       <input type="text" id="lastName" th:field="*{lastName}" required><br><br>
+      <label for="photos">Photos: </label>
+      <input id="photos" type="file" name="image" accept="image/png, image/jpeg" />
       <label for="password">Password:</label>
       <input type="password" id="password" th:field="*{password}"><br><br>
       <button type="submit">Save Changes</button>
