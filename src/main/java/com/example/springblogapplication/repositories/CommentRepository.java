@@ -1,5 +1,6 @@
 package com.example.springblogapplication.repositories;
 
+import com.example.springblogapplication.models.Account;
 import com.example.springblogapplication.models.Comment;
 import com.example.springblogapplication.models.Post;
 import org.springframework.data.domain.Sort;
