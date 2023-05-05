@@ -17,7 +17,11 @@
             display: flex;
             flex-direction: column;
         }
-
+        .post img {
+            max-width: 100%;
+            min-width: 100%;
+            height: auto;
+        }
         .content {
             flex: 1;
         }
@@ -63,6 +67,7 @@
         <div class="posts-container">
             <div class="post" th:each="post : ${posts}">
                 <h2><a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}">Title</a></h2>
+                <img th:if="${post.imageUrl != null and post.imageUrl != ''}" th:src="${post.imageUrl}" alt="Post image"/>
                 <h5 th:text="'Written by ' + ${post.account.firstName}">Account First Name</h5>
                 <h5 th:text="'Published at ' + ${post.createdAt}">Created At</h5>
                 <h5 th:text="'Updated at ' + ${post.updatedAt}">Updated At</h5>
