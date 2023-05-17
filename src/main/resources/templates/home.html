@@ -12,18 +12,123 @@
             height: 100%;
         }
 
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
         .container {
             min-height: 100%;
             display: flex;
             flex-direction: column;
         }
+
+        .header {
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0px 3px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: #555;
+        }
+
+        .posts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 3px 5px rgba(0,0,0,0.1);
+        }
+
+        .post {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+        }
+
+        .post:hover img {
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
         .post img {
             max-width: 100%;
-            min-width: 100%;
             height: auto;
+            transition: transform 0.3s ease-in-out;
         }
-        .content {
-            flex: 1;
+
+        .post .content {
+            padding: 10px;
+        }
+
+        .post h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .post h5 {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #999;
+        }
+
+        .post p {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 0;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .post a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .post a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0px -3px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .footer ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .footer a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -61,9 +166,10 @@
     </div>
 </nav>
 <div class="container">
+    <div class="header">
+        <a class="logo" href="/">Spring Boot Blog Application</a>
+    </div>
     <div class="content">
-        <h1>Spring Boot Blog Application</h1>
-        <hr />
         <div class="posts-container">
             <div class="post" th:each="post : ${posts}">
                 <h2><a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}">Title</a></h2>
@@ -86,7 +192,6 @@
             </ul>
         </div>
     </footer>
-
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

@@ -3,29 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 36px;
+            color: #333333;
+        }
+
+        table {
+            margin: 50px auto;
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 1000px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #ddd;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 50px;
+            max-height: 50px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #3e8e41;
+            color: white;
+            transform: translateY(-3px);
+        }
+    </style>
 </head>
 <body>
 <h1>Admin Page</h1>
 <table>
+    <thead>
     <tr>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
         <th>Photos</th>
+        <th>Action</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="account : ${accounts}">
         <td th:text="${account.firstName}"></td>
         <td th:text="${account.lastName}"></td>
         <td th:text="${account.email}"></td>
-        <td><img th:src="@{'/user-photos/' + ${account.id} + '/' + ${account.photos}}" width="50" height="50"/></td>
+        <td><img th:src="@{'/user-photos/' + ${account.id} + '/' + ${account.photos}}" /></td>
         <td>
             <form th:action="@{/admin/delete}" method="post">
                 <input type="hidden" name="id" th:value="${account.id}" />
                 <button type="submit">Delete</button>
             </form>
-
         </td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>
